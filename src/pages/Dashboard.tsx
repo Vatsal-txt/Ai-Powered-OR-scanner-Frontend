@@ -1,14 +1,28 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Shield, Camera, Upload, Clock, LogOut, CheckCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import QRScanner from "@/components/QRScanner";
+import QRUpload from "@/components/QRUpload";
+import { toast } from "sonner";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const userEmail = "vatsalxd@gmail.com"; // This would come from auth context
+  const [showScanner, setShowScanner] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
 
   const handleLogout = () => {
     navigate("/");
+  };
+
+  const handleScanSuccess = (decodedText: string) => {
+    console.log("QR Code scanned:", decodedText);
+    toast.success("QR Code scanned successfully!");
+    setShowScanner(false);
+    setShowUpload(false);
+    // Here you would send the decoded text to your AI analysis endpoint
   };
 
   const securityFeatures = [
@@ -90,6 +104,7 @@ const Dashboard = () => {
                 variant="gradient" 
                 size="lg" 
                 className="w-full h-16 text-base font-semibold gap-3"
+                onClick={() => setShowScanner(true)}
               >
                 <Camera className="h-5 w-5" />
                 Scan with Camera
@@ -98,6 +113,7 @@ const Dashboard = () => {
                 variant="gradient" 
                 size="lg" 
                 className="w-full h-16 text-base font-semibold gap-3"
+                onClick={() => setShowUpload(true)}
               >
                 <Upload className="h-5 w-5" />
                 Upload QR Image
@@ -145,10 +161,18 @@ const Dashboard = () => {
                   </CardDescription>
                 </CardContent>
               </Card>
-            </div>
           </div>
         </div>
       </div>
+
+      {showScanner && (
+        <QRScanner onScanSuccess={handleScanSuccess} onClose={() => setShowScanner(false)} />
+      )}
+
+      {showUpload && (
+        <QRUpload onScanSuccess={handleScanSuccess} onClose={() => setShowUpload(false)} />
+      )}
+    </div>
     </div>
   );
 };
