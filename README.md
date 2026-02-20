@@ -2,7 +2,8 @@
 
 ## Project info
 this is my CEP (community Engineering project) frontend 
-fully made by me using Loveable ai
+fully made by me 
+it was just prototype but fun to make 
 
 ## What technologies are used for this project?
 This project is built with:
